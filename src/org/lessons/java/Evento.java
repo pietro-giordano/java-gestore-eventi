@@ -28,16 +28,24 @@ public class Evento {
         return titolo;
     }
 
-    public void setTitolo(String titolo) {
-        this.titolo = titolo;
+    public void setTitolo(String titolo) throws EventoCreateException {
+        if (!titolo.isBlank()) {
+            this.titolo = titolo;
+        } else {
+            throw new EventoCreateException();
+        }
     }
 
     public String getData() {
         return data;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setData(String data) throws EventoCreateException, InvalidDateException {
+        if (!data.isBlank()) {
+            this.data = validatoreData(data);
+        } else {
+            throw new EventoCreateException();
+        }
     }
 
     public int getnPostiTotali() {
@@ -78,34 +86,28 @@ public class Evento {
         }
     }
 
-    public int prenota() throws RuntimeException {
-        try {
-            if (comparatoreData(this.data) && (nPostiTotali - nPostiPrenotati) > 0) {
-                return this.nPostiPrenotati++;
-            } else {
-                throw new RuntimeException();
+    public void prenota(int n) throws PrenotationException {
+        if (comparatoreData(this.data) && (nPostiTotali - nPostiPrenotati) > 0 && (nPostiTotali - nPostiPrenotati) > n) {
+            for (int i = 0; i < n; i++) {
+                nPostiPrenotati++;
             }
-        } catch (RuntimeException e) {
-            System.out.println("Evento concluso o posti disponibili finiti!");
-            return this.nPostiPrenotati;
+        } else {
+            throw new PrenotationException();
         }
     }
 
-    public int disdici() throws RuntimeException {
-        try {
-            if (comparatoreData(this.data) && nPostiPrenotati == 0) {
-                return this.nPostiPrenotati--;
-            } else {
-                throw new RuntimeException();
+    public void disdici(int n) throws PrenotationException {
+        if (comparatoreData(this.data) && nPostiPrenotati != 0) {
+            for (int i = 0; i < n; i++) {
+                nPostiPrenotati--;
             }
-        } catch (RuntimeException e) {
-            System.out.println("Evento concluso o nessun posto prenotato!");
-            return this.nPostiPrenotati;
+        } else {
+            throw new PrenotationException();
         }
     }
 
     @Override
     public String toString() {
-        return "Evento{" + data + " - " + titolo +'}';
+        return "Evento {" + data + " - " + titolo +'}';
     }
 }
