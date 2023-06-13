@@ -2,7 +2,6 @@ package org.lessons.java;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class Evento {
     private String titolo;
@@ -69,8 +68,8 @@ public class Evento {
         }
     }
 
-    public String validatoreData(String input) throws DateTimeParseException {
-        String regex = "\\d{2}/\\d{2}/\\d{4}";  // validator
+    public String validatoreData(String input) throws RuntimeException {
+        String regex = "\\d{2}/\\d{2}/\\d{4}";  // validatore
         try {
             if(input.matches(regex)) {
                 if (comparatoreData(input)) {
@@ -80,9 +79,9 @@ public class Evento {
                     return null;
                 }
             } else {
-                throw new DateTimeParseException("Data errata", input, 0);
+                throw new RuntimeException();
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             System.out.println("Formato data non valido");
             return null;
         }
