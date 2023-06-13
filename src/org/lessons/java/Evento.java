@@ -9,10 +9,18 @@ public class Evento {
     private int nPostiTotali;
     private int nPostiPrenotati;
 
-    public Evento(String titolo, String data, int nPostiTotali) {
-        this.titolo = titolo;
-        this.data = validatoreData(data);
-        this.nPostiTotali = nPositivo(nPostiTotali);
+    public Evento(String titolo, String data, int nPostiTotali) throws EventoCreateException, InvalidDateException {
+        if (!titolo.isBlank() || !data.isBlank()) {
+            this.titolo = titolo;
+            this.data = validatoreData(data);
+        } else {
+            throw new EventoCreateException();
+        }
+        if (nPostiTotali > 0) {
+            this.nPostiTotali = nPostiTotali;
+        } else {
+            throw new NumberFormatException();
+        }
         this.nPostiPrenotati = 0;
     }
 
@@ -40,22 +48,10 @@ public class Evento {
         return nPostiPrenotati;
     }
 
-    public Integer nPositivo(int n) throws NumberFormatException {
-        try {
-            if (n > 0) {
-                return n;
-            } else {
-                System.out.println("Numero inserito non valido!");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Si prega di inserire un numero!");
-        }
-        return null;
-    }
-
+    // restituisce true se data è valida, false se già passata; accetta formato dd/mm/yyyy
     public boolean comparatoreData(String date) {
         // formattatore
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         // parso stringa in data formattata
         LocalDate data = LocalDate.parse(date, formatter);
         // recupero data odierna
@@ -68,22 +64,17 @@ public class Evento {
         }
     }
 
-    public String validatoreData(String input) throws RuntimeException {
+    public String validatoreData(String input) throws InvalidDateException {
         String regex = "\\d{2}/\\d{2}/\\d{4}";  // validatore
-        try {
-            if(input.matches(regex)) {
-                if (comparatoreData(input)) {
-                    return input;
-                } else {
-                    System.out.println("La data inserita non è valida in quanto già passata!");
-                    return null;
-                }
+
+        if(input.matches(regex)) {
+            if (comparatoreData(input)) {
+                return input;
             } else {
-                throw new RuntimeException();
+                throw new InvalidDateException();
             }
-        } catch (RuntimeException e) {
-            System.out.println("Formato data non valido");
-            return null;
+        } else {
+            throw new InvalidDateException();
         }
     }
 
@@ -115,6 +106,6 @@ public class Evento {
 
     @Override
     public String toString() {
-        return "Evento{" + data + titolo +'}';
+        return "Evento{" + data + " - " + titolo +'}';
     }
 }
