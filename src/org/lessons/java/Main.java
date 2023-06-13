@@ -20,11 +20,12 @@ public class Main {
                 System.out.println("Inserisci numero di posti a disposizione per il concerto:");
                 int posti = Integer.parseInt(scanner.nextLine());
 
-                System.out.println("Inserisci ora concerto:");
+                System.out.println("Inserisci ora concerto (hh:mm):");
                 String ora = scanner.nextLine();
 
                 System.out.println("Inserisci prezzo concerto:");
                 BigDecimal prezzo = scanner.nextBigDecimal();
+                scanner.nextLine();
 
                 Concerto newConcerto = new Concerto(titolo, data, posti, ora, prezzo);
                 flag = true;
