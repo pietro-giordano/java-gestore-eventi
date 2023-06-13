@@ -35,7 +35,9 @@ public class Main {
                         case 1 -> {
                             System.out.println("Quanti posti vuoi prenotare?");
                             try {
-                                newEvento.prenota(Integer.parseInt(scanner.nextLine()));
+                                for (int i = 0; i < Integer.parseInt(scanner.nextLine()); i++) {
+                                    newEvento.prenota();
+                                }
                             } catch (PrenotationException e) {
                                 System.out.println("Posti non disponibili o evento finito");
                             }
@@ -43,7 +45,9 @@ public class Main {
                         case 2 -> {
                             System.out.println("Quanti posti vuoi disdire?");
                             try {
-                                newEvento.disdici(Integer.parseInt(scanner.nextLine()));
+                                for (int i = 0; i < Integer.parseInt(scanner.nextLine()); i++) {
+                                    newEvento.disdici();
+                                }
                             } catch (PrenotationException e) {
                                 System.out.println("Nessun posto da disdire o evento finito");
                             }

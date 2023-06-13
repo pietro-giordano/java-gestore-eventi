@@ -86,21 +86,17 @@ public class Evento {
         }
     }
 
-    public void prenota(int n) throws PrenotationException {
-        if (comparatoreData(this.data) && (nPostiTotali - nPostiPrenotati) > 0 && (nPostiTotali - nPostiPrenotati) > n) {
-            for (int i = 0; i < n; i++) {
-                nPostiPrenotati++;
-            }
+    public void prenota() throws PrenotationException {
+        if (comparatoreData(this.data) && (nPostiTotali - nPostiPrenotati) > 0) {
+            nPostiPrenotati++;
         } else {
             throw new PrenotationException();
         }
     }
 
-    public void disdici(int n) throws PrenotationException {
+    public void disdici() throws PrenotationException {
         if (comparatoreData(this.data) && nPostiPrenotati != 0) {
-            for (int i = 0; i < n; i++) {
-                nPostiPrenotati--;
-            }
+            nPostiPrenotati--;
         } else {
             throw new PrenotationException();
         }
