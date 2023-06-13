@@ -12,7 +12,7 @@ public class Evento {
 
     public Evento(String titolo, String data, int nPostiTotali) {
         this.titolo = titolo;
-        this.data = data;
+        this.data = validatoreData(data);
         this.nPostiTotali = nPositivo(nPostiTotali);
         this.nPostiPrenotati = 0;
     }
@@ -54,18 +54,26 @@ public class Evento {
         return null;
     }
 
-    public String comparatoreData(String input) throws DateTimeParseException {
+    public boolean comparatoreData(String date) {
+        // formattatore
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        // parso stringa in data formattata
+        LocalDate data = LocalDate.parse(date, formatter);
+        // recupero data odierna
+        LocalDate oggi = LocalDate.now();
+
+        if (data.isAfter(oggi)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String validatoreData(String input) throws DateTimeParseException {
         String regex = "\\d{2}/\\d{2}/\\d{4}";  // validator
         try {
             if(input.matches(regex)) {
-                // formattatore
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-                // parso stringa in data formattata
-                LocalDate data = LocalDate.parse(input, formatter);
-                // recupero data odierna
-                LocalDate oggi = LocalDate.now();
-
-                if (data.isAfter(oggi)) {
+                if (comparatoreData(input)) {
                     return input;
                 } else {
                     System.out.println("La data inserita non è valida in quanto già passata!");
@@ -78,5 +86,36 @@ public class Evento {
             System.out.println("Formato data non valido");
             return null;
         }
+    }
+
+    public int prenota() throws RuntimeException {
+        try {
+            if (comparatoreData(this.data) && (nPostiTotali - nPostiPrenotati) > 0) {
+                return this.nPostiPrenotati++;
+            } else {
+                throw new RuntimeException();
+            }
+        } catch (RuntimeException e) {
+            System.out.println("Evento concluso o posti disponibili finiti!");
+            return this.nPostiPrenotati;
+        }
+    }
+
+    public int disdici() throws RuntimeException {
+        try {
+            if (comparatoreData(this.data) && nPostiPrenotati == 0) {
+                return this.nPostiPrenotati--;
+            } else {
+                throw new RuntimeException();
+            }
+        } catch (RuntimeException e) {
+            System.out.println("Evento concluso o nessun posto prenotato!");
+            return this.nPostiPrenotati;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Evento{" + data + titolo +'}';
     }
 }
