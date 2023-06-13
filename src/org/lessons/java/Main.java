@@ -1,5 +1,6 @@
 package org.lessons.java;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
@@ -16,13 +17,19 @@ public class Main {
                 System.out.println("Inserisci data (dd/mm/yyyy):");
                 String data = scanner.nextLine();
 
-                System.out.println("Inserisci numero di posti a disposizione per l'evento:");
+                System.out.println("Inserisci numero di posti a disposizione per il concerto:");
                 int posti = Integer.parseInt(scanner.nextLine());
 
-                Evento newEvento = new Evento(titolo, data, posti);
-                flag = true;
-                System.out.println(newEvento.toString() + " è stato creato");
+                System.out.println("Inserisci ora concerto:");
+                String ora = scanner.nextLine();
 
+                System.out.println("Inserisci prezzo concerto:");
+                BigDecimal prezzo = scanner.nextBigDecimal();
+
+                Concerto newConcerto = new Concerto(titolo, data, posti, ora, prezzo);
+                flag = true;
+
+                System.out.println(newConcerto.toString() + " è stato creato");
                 boolean flag2 = false;
                 do {
                     System.out.println("Adesso scegli cosa vuoi fare:\n" +
@@ -36,7 +43,7 @@ public class Main {
                             System.out.println("Quanti posti vuoi prenotare?");
                             try {
                                 for (int i = 0; i < Integer.parseInt(scanner.nextLine()); i++) {
-                                    newEvento.prenota();
+                                    newConcerto.prenota();
                                 }
                             } catch (PrenotationException e) {
                                 System.out.println("Posti non disponibili o evento finito");
@@ -46,15 +53,15 @@ public class Main {
                             System.out.println("Quanti posti vuoi disdire?");
                             try {
                                 for (int i = 0; i < Integer.parseInt(scanner.nextLine()); i++) {
-                                    newEvento.disdici();
+                                    newConcerto.disdici();
                                 }
                             } catch (PrenotationException e) {
                                 System.out.println("Nessun posto da disdire o evento finito");
                             }
                         }
                         case 3 -> {
-                            System.out.println("Posti prenotati: " + newEvento.getnPostiPrenotati());
-                            System.out.println("Posti disponibili: " + (newEvento.getnPostiTotali() + newEvento.getnPostiPrenotati()));
+                            System.out.println("Posti prenotati: " + newConcerto.getnPostiPrenotati());
+                            System.out.println("Posti disponibili: " + (newConcerto.getnPostiTotali() + newConcerto.getnPostiPrenotati()));
                         }
                         case 4 -> flag2 = true;
                         default -> System.out.println("Input errato");
@@ -66,6 +73,10 @@ public class Main {
                 System.out.println("Numero posti a disposione non valido");
             } catch (InvalidDateException e) {
                 System.out.println("Data non valida");
+            } catch (InvalidPriceException e) {
+                System.out.println("Prezzo non valido");
+            } catch (InvalidTimeException e) {
+                System.out.println("Orario non valido");
             }
         } while (!flag);
 
