@@ -1,5 +1,6 @@
 package org.lessons.java;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,17 @@ public class ProgrammEventi {
         this.eventi = new ArrayList<>();
     }
 
+    public String getTitolo() {
+        return titolo;
+    }
+
     // metodo aggiungi evento
-    public void aggiungiEvento(Evento evento) {
-        eventi.add(evento);
+    public void aggiungiEvento(Evento evento) throws InvalidEventoException {
+        if (evento instanceof Evento) {
+            eventi.add(evento);
+        } else {
+            throw new InvalidEventoException();
+        }
     }
 
     // metodo che restituisce numero eventi
@@ -25,5 +34,28 @@ public class ProgrammEventi {
     // metodo che svuota lista
     public void svuotaEventi() {
         eventi.clear();
+    }
+
+    // metodo che genera lista di eventi di una data
+    public List<Evento> getEventiData(LocalDate data) throws InvalidDateException {
+        if (data instanceof LocalDate) {
+            List<Evento> eventiData = new ArrayList<>();
+            for (Evento evento : eventi) {
+                if (evento.getData().equals(data)) {
+                    eventiData.add(evento);
+                }
+            }
+            return eventiData;
+        } else {
+            throw new InvalidDateException();
+        }
+    }
+
+    // metodo che ritorna stringhe data + titolo
+    public void getDataTitoloEventi() {
+        System.out.println("Titolo programma: " + getTitolo());
+        for (Evento evento : eventi) {
+            System.out.println(evento.getData() + " - " + evento.getTitolo());
+        }
     }
 }
