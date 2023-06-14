@@ -18,12 +18,8 @@ public class ProgrammEventi {
     }
 
     // metodo aggiungi evento
-    public void aggiungiEvento(Evento evento) throws InvalidEventoException {
-        if (evento instanceof Evento) {
-            eventi.add(evento);
-        } else {
-            throw new InvalidEventoException();
-        }
+    public void aggiungiEvento(Evento evento) {
+        eventi.add(evento);
     }
 
     // metodo che restituisce numero eventi
@@ -37,18 +33,14 @@ public class ProgrammEventi {
     }
 
     // metodo che genera lista di eventi di una data
-    public List<Evento> getEventiData(LocalDate data) throws InvalidDateException {
-        if (data instanceof LocalDate) {
-            List<Evento> eventiData = new ArrayList<>();
-            for (Evento evento : eventi) {
-                if (evento.getData().equals(data)) {
-                    eventiData.add(evento);
-                }
+    public List<Evento> getEventiData(LocalDate data) {
+        List<Evento> eventiData = new ArrayList<>();
+        for (Evento evento : eventi) {
+            if (evento.getData().equals(data)) {
+                eventiData.add(evento);
             }
-            return eventiData;
-        } else {
-            throw new InvalidDateException();
         }
+        return eventiData;
     }
 
     // metodo che ritorna stringhe data + titolo
